@@ -35,26 +35,78 @@ class EditableAncestryField extends EditableFormField {
 
 	/**
 	 * Return the Value of this Field
+	 * Grid of four cols and 16 rows
 	 *
 	 * @return String
 	 */
 	function getValueFromData($data) {
+		$maxCols = 4;
+		$colourArray = array(
+			"f" => "darkBlue",
+			"m" => "grey"
+		);
+		$backgroundColourArray = array(
+			"f" => "white",
+			"m" => "white"
+		);
+		$generationKeyArray = array();
+		for($col = 1; $col <= $maxCols; $col++) {
+			$generationKeyArray[$col] = "m";
+		}
+		$maxRows = pow(2, $maxCols);
 		$returnValue = "";
 		$value = (isset($data[$this->Name])) ? $data[$this->Name] : false;
+		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				foreach($value as $key => $dataEntered) {
-					$key = str_replace("Field", "", $key);
-					$key = str_replace("m", "mother-", $key);
-					$key = str_replace("f", "father-", $key);
-					if(!$dataEntered) {
-						$dataEntered = "---";
+				$html = "<table cellpadding=\"5\" cellspacing=\"5\" border=\"0\"><tbody>";
+				for($row = 1; $row <= $maxRows; $row++) {
+					$html .= "<tr>";
+					for($col = 1; $col <= $maxCols;$col++) {
+						$myRowColAdjuster = floor($maxRows / (pow(2, $col)));
+						$myRowSpan = $myRowColAdjuster;
+						$skipCell = ($row - 1) % $myRowColAdjuster ? TRUE : FALSE;
+						if($skipCell) {
+							//do nothing
+						}
+						else {
+							if(($row-1) == round($maxRows / 2) && $col == 1) {
+								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\"></td></tr><tr>";
+							}
+							$currentKey = $generationKeyArray[$col];
+							if($generationKeyArray[$col] == "m") {
+								$generationKeyArray[$col] = "f";
+							}
+							else {
+								$generationKeyArray[$col] = "m";
+							}
+							$myKey = "";
+							for($colsForKey = 1; $colsForKey < $col; $colsForKey++) {
+								$myKey .= $generationKeyArray[$colsForKey];
+							}
+							$myKey .= $currentKey."Field";
+							$title = $name = "";
+							$colour = $colourArray[$currentKey];
+							$backgroundColour = $backgroundColourArray[$currentKey];
+							if(isset($value[$myKey])) {
+								$title = $formField->titleForAncestor($myKey);
+								$name = $value[$myKey];
+								if(!$name) {
+									$name = "not entered";
+								}
+							}
+							$html .= "<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\" border=\"1\">
+								<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
+								<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div></td>";
+						}
 					}
-					$returnValue .= "<br />$key: $dataEntered ";
+					$html .= "</tr>";
 				}
+				$html .= "</tbody></table>";
 			}
 		}
-		return $returnValue;
+		die($html);
+		return $html;
 	}
 
 	public function Icon() {

@@ -11,48 +11,52 @@ class AncestryField extends FormField {
 	 */
 	//level 1
 	protected static $array_of_ancestors = array(
-		"mField" => "Mother",
-		"fField" => "Father",
+		"m" => "Mother",
+		"f" => "Father",
 	//level 2
-		"mmField" => "Mother's Mother",
-		"mfField" => "Mother's Father",
-		"fmField" => "Father's Mother",
-		"ffField" => "Father's Father",
+		"mm" => "Mother's Mother",
+		"mf" => "Mother's Father",
+		"fm" => "Father's Mother",
+		"ff" => "Father's Father",
 	//level 3
-		"mmmField" => "Mother's Mother's Mother",
-		"mmfField" => "Mother's Mother's Father",
-		"mfmField" => "Mother's Father's Mother",
-		"mffField" => "Mother's Father's Father",
-		"fmmField" => "Father's Mother's Mother",
-		"fmfField" => "Father's Mother's Father",
-		"ffmField" => "Father's Father's Mother",
-		"fffField" => "Father's Father's Father",
+		"mmm" => "Mother's Mother's Mother",
+		"mmf" => "Mother's Mother's Father",
+		"mfm" => "Mother's Father's Mother",
+		"mff" => "Mother's Father's Father",
+		"fmm" => "Father's Mother's Mother",
+		"fmf" => "Father's Mother's Father",
+		"ffm" => "Father's Father's Mother",
+		"fff" => "Father's Father's Father",
 	//level 4
-		"mmmmField" => "Mother's Mother's Mother's Mother",
-		"mmmfField" => "Mother's Mother's Mother's Father",
-		"mmfmField" => "Mother's Mother's Father's Mother",
-		"mmffField" => "Mother's Mother's Father's Father",
-		"mfmmField" => "Mother's Father's Mother's Mother",
-		"mfmfField" => "Mother's Father's Mother's Father",
-		"mffmField" => "Mother's Father's Father's Mother",
-		"mfffField" => "Mother's Father's Father's Father",
-		"fmmmField" => "Father's Mother's Mother's Mother",
-		"fmmfField" => "Father's Mother's Mother's Father",
-		"fmfmField" => "Father's Mother's Father's Mother",
-		"fmffField" => "Father's Mother's Father's Father",
-		"ffmmField" => "Father's Father's Mother's Mother",
-		"ffmfField" => "Father's Father's Mother's Father",
-		"fffmField" => "Father's Father's Father's Mother",
-		"ffffField" => "Father's Father's Father's Father"
+		"mmmm" => "Mother's Mother's Mother's Mother",
+		"mmmf" => "Mother's Mother's Mother's Father",
+		"mmfm" => "Mother's Mother's Father's Mother",
+		"mmff" => "Mother's Mother's Father's Father",
+		"mfmm" => "Mother's Father's Mother's Mother",
+		"mfmf" => "Mother's Father's Mother's Father",
+		"mffm" => "Mother's Father's Father's Mother",
+		"mfff" => "Mother's Father's Father's Father",
+		"fmmm" => "Father's Mother's Mother's Mother",
+		"fmmf" => "Father's Mother's Mother's Father",
+		"fmfm" => "Father's Mother's Father's Mother",
+		"fmff" => "Father's Mother's Father's Father",
+		"ffmm" => "Father's Father's Mother's Mother",
+		"ffmf" => "Father's Father's Mother's Father",
+		"fffm" => "Father's Father's Father's Mother",
+		"ffff" => "Father's Father's Father's Father"
 	);
 	static function get_array_of_ancestors() {return self::$array_of_ancestors;}
 	static function set_array_of_ancestors($a) {self::$array_of_ancestors = $a;}
+	public function titleForAncestor($k) {
+		$k = str_replace("Field", "", $k);
+		return self::$array_of_ancestors[$k];
+	}
 
 	protected $fieldHolder = array();
 
 	function __construct($name, $title = null, $value = ""){
 		foreach(self::get_array_of_ancestors() as $key => $fieldTitle) {
-			$this->fieldHolder[$key] = new TextField($name . '['.$key.']', $fieldTitle);
+			$this->fieldHolder[$key] = new TextField($name . '['.$key.'Field]', $fieldTitle);
 		}
 		parent::__construct($name, $title, $value);
 	}
@@ -70,9 +74,9 @@ class AncestryField extends FormField {
 		Requirements::javascript("userforms_relatives/javascript/AncestryField.js");
 		$html = "";
 		foreach(self::get_array_of_ancestors() as $key => $fieldTitle) {
-			$levelClass = "level".(strlen($key)-5);
-			$nextLevels = ".".str_replace("Field", "mField", $key).", .".str_replace("Field", "fField", $key);
-			$html .= "<div class=\"$key $levelClass ancestorNode \" rel=\"$nextLevels\">".$this->fieldHolder[$key]->SmallFieldHolder()."</div>";
+			$levelClass = "level".(strlen($key));
+			$nextLevels = ".{$key}mField, .{$key}fField";
+			$html .= "<div class=\"{$key}Field $levelClass ancestorNode \" rel=\"$nextLevels\">".$this->fieldHolder[$key]->SmallFieldHolder()."</div>";
 		}
 		return $html;
 	}
