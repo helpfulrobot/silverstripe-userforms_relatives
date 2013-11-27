@@ -16,6 +16,18 @@ class EditableAncestryField extends EditableFormField {
 		return $fields;
 	}
 
+	static $max_cols = 4;
+
+	static $colour_array = array(
+		"f" => "black",
+		"m" => "grey"
+	);
+
+	static $background_colour_array = array(
+		"f" => "#eee",
+		"m" => "white"
+	);
+
 	function getFormField() {
 		return new AncestryField($this->Name, $this->Title);
 	}
@@ -40,16 +52,13 @@ class EditableAncestryField extends EditableFormField {
 	 * @return String
 	 */
 	function getValueFromData($data) {
-		$maxCols = 4;
-		$colourArray = array(
-			"f" => "darkBlue",
-			"m" => "grey"
-		);
-		$backgroundColourArray = array(
-			"f" => "white",
-			"m" => "white"
-		);
-		$generationKeyArray = array();
+
+		$maxCols = self::$max_cols;
+
+		$colourArray = self::$colour_array;
+
+		$backgroundColourArray = self::$background_colour_array;
+
 		for($col = 1; $col <= $maxCols; $col++) {
 			$generationKeyArray[$col] = "m";
 		}
@@ -59,7 +68,7 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html = "<table cellpadding=\"5\" cellspacing=\"5\" border=\"0\"><tbody>";
+				$html = "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
