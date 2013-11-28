@@ -77,7 +77,7 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html = "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
+				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
