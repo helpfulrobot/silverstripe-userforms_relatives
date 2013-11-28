@@ -94,12 +94,13 @@ class EditableAncestryField extends EditableFormField {
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
 								$html .= "
-								<td colspan=\"$maxCols\">&nbps;</td>
+								<td colspan=\"$maxCols\">&nbsp;</td>
 							</tr>
 						</tbody>
 					</table>
+					<br />
 					<table style=\"width: 100%\">
-						<tbody>";
+						<tbody><tr>";
 							}
 							$currentKey = $generationKeyArray[$col];
 							if($generationKeyArray[$col] == "m") {
@@ -124,7 +125,7 @@ class EditableAncestryField extends EditableFormField {
 								}
 							}
 							$html .= "
-								<td rowspan=\"$myRowSpan\" width=\"".$colWidth."%;\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
+								<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
 									<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
 									<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div>
 								</td>";
@@ -138,6 +139,7 @@ class EditableAncestryField extends EditableFormField {
 					</table>";
 			}
 		}
+		die($html);
 		return $html;
 	}
 
