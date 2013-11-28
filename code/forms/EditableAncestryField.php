@@ -139,7 +139,6 @@ class EditableAncestryField extends EditableFormField {
 					</table>";
 			}
 		}
-		die($html);
 		return $html;
 	}
 
