@@ -11,6 +11,8 @@ class EditableAncestryField extends EditableFormField {
 
 	static $plural_name = 'Ancestry fields';
 
+	static $repeated_fields = array();
+
 	function getFieldConfiguration() {
 		$fields = parent::getFieldConfiguration();
 		return $fields;
@@ -53,14 +55,24 @@ class EditableAncestryField extends EditableFormField {
 	 */
 	function getValueFromData($data) {
 
+		$html = "";
+
+		foreach(self::$repeated_fields as $field) {
+			$extraFieldArray[] = isset($data[$field]) ? $data[$field] : "";
+		}
+
+		$html = "<h2>".implode(", " , $extraFieldArray)."</h2>";
+
 		$maxCols = self::$max_cols;
 
 		$colourArray = self::$colour_array;
 
 		$backgroundColourArray = self::$background_colour_array;
 
+		$colWidth = round((1 / $maxCols ) * 100);
+
 		for($col = 1; $col <= $maxCols; $col++) {
-			$generationKeyArray[$col] = "m";
+			$generationKeyArray[$col] = "f";
 		}
 		$maxRows = pow(2, $maxCols);
 		$returnValue = "";
@@ -68,7 +80,8 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html = "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
+				$html .= "
+					<table style=\"width: 95%\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
@@ -80,7 +93,13 @@ class EditableAncestryField extends EditableFormField {
 						}
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
-								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\"></td></tr><tr>";
+								$html .= "
+								<td colspan=\"$maxCols\"></td>
+							</tr>
+						</tbody>
+					</table>
+					<table style=\"width: 95%\">
+						<tbody>";
 							}
 							$currentKey = $generationKeyArray[$col];
 							if($generationKeyArray[$col] == "m") {
@@ -104,16 +123,22 @@ class EditableAncestryField extends EditableFormField {
 									$name = "not entered";
 								}
 							}
-							$html .= "<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\" border=\"1\">
-								<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
-								<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div></td>";
+							$html .= "
+								<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"width: ".$colWidth."%; padding: 4px; background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
+									<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
+									<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div>
+								</td>";
 						}
 					}
-					$html .= "</tr>";
+					$html .= "
+							</tr>";
 				}
-				$html .= "</tbody></table>";
+				$html .= "
+						</tbody>
+					</table>";
 			}
 		}
+		die($html);
 		return $html;
 	}
 
