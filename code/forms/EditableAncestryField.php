@@ -69,7 +69,7 @@ class EditableAncestryField extends EditableFormField {
 
 		$backgroundColourArray = self::$background_colour_array;
 
-		$colWidth = round((1 / $maxCols ) * 100);
+		$colWidth = round((1 / $maxCols ) * 100)-1;
 
 		for($col = 1; $col <= $maxCols; $col++) {
 			$generationKeyArray[$col] = "f";
@@ -81,7 +81,7 @@ class EditableAncestryField extends EditableFormField {
 		if($value) {
 			if(is_array($value)) {
 				$html .= "
-					<table style=\"width: 95%\"><tbody>";
+					<table style=\"width: 100%\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
@@ -94,11 +94,10 @@ class EditableAncestryField extends EditableFormField {
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
 								$html .= "
-								<td colspan=\"$maxCols\"></td>
 							</tr>
 						</tbody>
 					</table>
-					<table style=\"width: 95%\">
+					<table style=\"width: 100%\">
 						<tbody>";
 							}
 							$currentKey = $generationKeyArray[$col];
@@ -124,7 +123,7 @@ class EditableAncestryField extends EditableFormField {
 								}
 							}
 							$html .= "
-								<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"width: ".$colWidth."%; padding: 4px; background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
+								<td rowspan=\"$myRowSpan\" width=\"".$colWidth."%;\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
 									<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
 									<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div>
 								</td>";
@@ -138,6 +137,7 @@ class EditableAncestryField extends EditableFormField {
 					</table>";
 			}
 		}
+		die($html);
 		return $html;
 	}
 
