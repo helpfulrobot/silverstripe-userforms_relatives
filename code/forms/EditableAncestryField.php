@@ -94,6 +94,7 @@ class EditableAncestryField extends EditableFormField {
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
 								$html .= "
+								<td colspan=\"$maxCols\">&nbps;</td>
 							</tr>
 						</tbody>
 					</table>
@@ -137,6 +138,7 @@ class EditableAncestryField extends EditableFormField {
 					</table>";
 			}
 		}
+		die($html);
 		return $html;
 	}
 
