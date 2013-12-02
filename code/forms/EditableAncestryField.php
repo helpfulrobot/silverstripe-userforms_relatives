@@ -30,6 +30,11 @@ class EditableAncestryField extends EditableFormField {
 		"m" => "white"
 	);
 
+	static $alternating_letters = array(
+		"f",
+		"m"
+	);
+
 	function getFormField() {
 		return new AncestryField($this->Name, $this->Title);
 	}
@@ -69,7 +74,7 @@ class EditableAncestryField extends EditableFormField {
 		$backgroundColourArray = self::$background_colour_array;
 
 		for($col = 1; $col <= $maxCols; $col++) {
-			$generationKeyArray[$col] = "m";
+			$generationKeyArray[$col] = self::$alternating_letters[0];
 		}
 		$maxRows = pow(2, $maxCols);
 		$returnValue = "";
@@ -92,11 +97,11 @@ class EditableAncestryField extends EditableFormField {
 								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\"></td></tr><tr>";
 							}
 							$currentKey = $generationKeyArray[$col];
-							if($generationKeyArray[$col] == "m") {
-								$generationKeyArray[$col] = "f";
+							if($generationKeyArray[$col] == self::$alternating_letters[0]) {
+								$generationKeyArray[$col] = self::$alternating_letters[1];
 							}
 							else {
-								$generationKeyArray[$col] = "m";
+								$generationKeyArray[$col] = self::$alternating_letters[0];
 							}
 							$myKey = "";
 							for($colsForKey = 1; $colsForKey < $col; $colsForKey++) {
