@@ -41,10 +41,10 @@ class EditableOffSpringField extends EditableFormField {
 	function getValueFromData($data) {
 		$value = (isset($data[$this->Name])) ? $data[$this->Name] : false;
 		if($value) {
+			$sexySex = isset($value["sex"]) ?  ($value["sex"] == 0 ? "female" : "male") : "-- not entered --";
 			$name = isset($value["name"]) ? $value["name"] : "-- not entered --";
 			$dob = isset($value["dob"]) ? $value["dob"] : "-- not entered --";
-			$sex = isset($value["sex"]) ? $value["sex"] : "-- not entered --";
-			return "Name: $name | dob: $dob | sex: $sex";
+			return "Name: $name | dob: $dob | sex: $sexySex";
 		}
 	}
 

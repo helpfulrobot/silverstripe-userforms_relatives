@@ -30,11 +30,6 @@ class EditableAncestryField extends EditableFormField {
 		"m" => "white"
 	);
 
-	static $alternating_letters = array(
-		"f",
-		"m"
-	);
-
 	function getFormField() {
 		return new AncestryField($this->Name, $this->Title);
 	}
@@ -59,17 +54,14 @@ class EditableAncestryField extends EditableFormField {
 	 * @return String
 	 */
 	function getValueFromData($data) {
+
 		$html = "";
 
-		$extraFieldArray = array();
 		foreach(self::$repeated_fields as $field) {
-			if(!empty($data[$field])) {
-				$extraFieldArray[] = $data[$field];
-			}
+			$extraFieldArray[] = isset($data[$field]) ? $data[$field] : "";
 		}
-		if(count($extraFieldArray)) {
-			$html = "<h2>".implode(", " , $extraFieldArray)."</h2>";
-		}
+
+		$html = "<h2>".implode(", " , $extraFieldArray)."</h2>";
 
 		$maxCols = self::$max_cols;
 
@@ -77,8 +69,10 @@ class EditableAncestryField extends EditableFormField {
 
 		$backgroundColourArray = self::$background_colour_array;
 
+		$colWidth = round((1 / $maxCols ) * 100)-1;
+
 		for($col = 1; $col <= $maxCols; $col++) {
-			$generationKeyArray[$col] = self::$alternating_letters[0];
+			$generationKeyArray[$col] = "f";
 		}
 		$maxRows = pow(2, $maxCols);
 		$returnValue = "";
@@ -86,7 +80,8 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
+				$html .= "
+					<table><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
@@ -98,14 +93,21 @@ class EditableAncestryField extends EditableFormField {
 						}
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
-								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\"></td></tr><tr>";
+								$html .= "
+								<td colspan=\"$maxCols\">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<table style=\"width: 100%\">
+						<tbody><tr>";
 							}
 							$currentKey = $generationKeyArray[$col];
-							if($generationKeyArray[$col] == self::$alternating_letters[0]) {
-								$generationKeyArray[$col] = self::$alternating_letters[1];
+							if($generationKeyArray[$col] == "m") {
+								$generationKeyArray[$col] = "f";
 							}
 							else {
-								$generationKeyArray[$col] = self::$alternating_letters[0];
+								$generationKeyArray[$col] = "m";
 							}
 							$myKey = "";
 							for($colsForKey = 1; $colsForKey < $col; $colsForKey++) {
@@ -122,21 +124,20 @@ class EditableAncestryField extends EditableFormField {
 									$name = "not entered";
 								}
 							}
-							$html .= "<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\" border=\"1\">
-								<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
-								<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div></td>";
+							$html .= "
+								<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\">
+									<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
+									<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div>
+								</td>";
 						}
 					}
-					$html .= "</tr>";
+					$html .= "
+							</tr>";
 				}
-				$html .= "</tbody></table>";
+				$html .= "
+						</tbody>
+					</table>";
 			}
-		}
-		$latestSubmissions = DataObject::get("SubmittedForm", "", "Created DESC", "", 1);
-		//this is a hack as I could not find a way to link this editableformfield to a submission...
-		//it will not work when two people are submitting at the same time!
-		foreach($latestSubmissions as $latestSubmission) {
-			$html .= "<h3><a href=\"".Director::absoluteBaseURL()."/viewsubmissionfromuserform/show/".$latestSubmission->ID."/\">view (and print) submission online ... </a></h3>";
 		}
 		return $html;
 	}

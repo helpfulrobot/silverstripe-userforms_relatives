@@ -117,9 +117,6 @@ class AncestryField extends FormField {
 		return $array;
 	}
 
-	public function Icon() {
-		return 'userforms/images/' . strtolower($this->class) . '.png';
-	}
 
 }
 

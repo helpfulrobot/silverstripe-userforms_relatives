@@ -12,3 +12,6 @@
 //AncestryField::set_array_of_ancestors($a);
 //===================---------------- END userforms_relatives MODULE ----------------===================
 
+Director::addRules(50, array(
+	'viewsubmissionfromuserform//$Action/$ID/$Batch' => 'ViewSubmittedForm'
+));
