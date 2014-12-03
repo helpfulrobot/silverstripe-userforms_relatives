@@ -15,7 +15,7 @@
 			<% control FieldValues %>
 				<% if Value %>
 				<div class="fieldHolder $ClassName">
-					<h2>$Title.RAW</h2>
+					<div class="titleHolder">$Title.RAW</div>
 					<div class="valueHolder">$Value.RAW</div>
 					<hr />
 				</div>
