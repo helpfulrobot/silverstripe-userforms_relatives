@@ -13,11 +13,13 @@
 	<% control SubmittedForm %>
 		<% if FieldValues %>
 			<% control FieldValues %>
+				<% if Value %>
 				<div class="fieldHolder $ClassName">
-					<h2>$Title</h2>
-					$Value.RAW
+					<h2>$Title.RAW</h2>
+					<div class="valueHolder">$Value.RAW</div>
 					<hr />
 				</div>
+				<% end_if %>
 			<% end_control %>
 		<% else %>
 			<p class="bad">Could not find data for submitted form.</p>

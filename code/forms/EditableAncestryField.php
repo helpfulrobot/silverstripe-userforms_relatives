@@ -59,7 +59,7 @@ class EditableAncestryField extends EditableFormField {
 	 * @return String
 	 */
 	function getValueFromData($data) {
-		$html = "";
+		$html = "<div class=\"editableAncestryField\">";
 
 		$extraFieldArray = array();
 		foreach(self::$repeated_fields as $field) {
@@ -86,7 +86,7 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\"><tbody>";
+				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\" class=\"\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
@@ -138,6 +138,7 @@ class EditableAncestryField extends EditableFormField {
 		foreach($latestSubmissions as $latestSubmission) {
 			$html .= "<h3><a href=\"".Director::absoluteBaseURL()."/viewsubmissionfromuserform/show/".$latestSubmission->ID."/\">view (and print) submission online ... </a></h3>";
 		}
+		$html .= "</div>";
 		return $html;
 	}
 
