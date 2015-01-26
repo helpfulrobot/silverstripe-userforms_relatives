@@ -68,7 +68,7 @@ class EditableAncestryField extends EditableFormField {
 			}
 		}
 		if(count($extraFieldArray)) {
-			$html .= "<h2>".implode(", " , $extraFieldArray)."</h2>";
+			$html .= "<h2 class=\"extraFieldArray\">".implode(", " , $extraFieldArray)."</h2>";
 		}
 
 		$maxCols = self::$max_cols;
@@ -86,7 +86,7 @@ class EditableAncestryField extends EditableFormField {
 		$formField = $this->getFormField();
 		if($value) {
 			if(is_array($value)) {
-				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\" class=\"\"><tbody>";
+				$html .= "<table cellpadding=\"3\" cellspacing=\"3\" border=\"0\" width=\"95%\" class=\"ancestryTable\"><tbody>";
 				for($row = 1; $row <= $maxRows; $row++) {
 					$html .= "<tr>";
 					for($col = 1; $col <= $maxCols;$col++) {
@@ -98,7 +98,7 @@ class EditableAncestryField extends EditableFormField {
 						}
 						else {
 							if(($row-1) == round($maxRows / 2) && $col == 1) {
-								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\"></td></tr><tr>";
+								$html .= "<td colspan=\"$maxCols\" style=\"background-color: #ccc\" class=\"endOfRow\"></td></tr><tr>";
 							}
 							$currentKey = $generationKeyArray[$col];
 							if($generationKeyArray[$col] == self::$alternating_letters[0]) {
@@ -115,14 +115,17 @@ class EditableAncestryField extends EditableFormField {
 							$title = $name = "";
 							$colour = $colourArray[$currentKey];
 							$backgroundColour = $backgroundColourArray[$currentKey];
+							$completionClass = "emptyCell";
 							if(isset($value[$myKey])) {
 								$title = $formField->titleForAncestor($myKey);
 								$name = $value[$myKey];
+								$completionClass = "completedCell";
 								if(!$name) {
 									$name = "not entered";
+									$completionClass = "noNameEnteredCell";
 								}
 							}
-							$html .= "<td rowspan=\"$myRowSpan\" class=\"col$col row$row\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\" border=\"1\">
+							$html .= "<td rowspan=\"$myRowSpan\" class=\"col$col row$row $completionClass\" style=\"background-color: $backgroundColour; border-top: 2px solid $colour; border-bottom: 2px solid $colour; border-left: 1px solid $colour; border-right: 1px solid $colour\" border=\"1\">
 								<strong style=\"color: $colour; text-transform: uppercase; font-size: 75%; font-weight: bold;\">$title:</strong>
 								<div style=\"font-size: 100%; color:$colour \"><u>$name</u></div></td>";
 						}
@@ -136,7 +139,7 @@ class EditableAncestryField extends EditableFormField {
 		//this is a hack as I could not find a way to link this editableformfield to a submission...
 		//it will not work when two people are submitting at the same time!
 		foreach($latestSubmissions as $latestSubmission) {
-			$html .= "<h3><a href=\"".Director::absoluteBaseURL()."/viewsubmissionfromuserform/show/".$latestSubmission->ID."/\">view (and print) submission online ... </a></h3>";
+			$html .= "<h3 class=\"printLinkForAncestryForm\"><a href=\"".Director::absoluteBaseURL()."/viewsubmissionfromuserform/show/".$latestSubmission->ID."/\">view (and print) submission online ... </a></h3>";
 		}
 		$html .= "</div>";
 		return $html;
