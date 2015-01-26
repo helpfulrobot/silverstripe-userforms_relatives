@@ -68,7 +68,7 @@ class EditableAncestryField extends EditableFormField {
 			}
 		}
 		if(count($extraFieldArray)) {
-			$html .= "<h2 class=\"extraFieldArray\">".implode(", " , $extraFieldArray)."</h2>";
+			$html .= "<h2 class=\"extraFieldArray\">".implode(" " , $extraFieldArray)."</h2>";
 		}
 
 		$maxCols = self::$max_cols;

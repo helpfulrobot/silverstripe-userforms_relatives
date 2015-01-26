@@ -14,7 +14,7 @@
 		<% if FieldValues %>
 			<% control FieldValues %>
 				<% if Value %>
-				<div class="fieldHolder $ClassName">
+				<div class="fieldHolder $ClassName Item$Pos $Name.ATT">
 					<div class="titleHolder">$Title.RAW</div>
 					<div class="valueHolder">$Value.RAW</div>
 					<hr />
